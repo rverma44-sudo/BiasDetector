@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "News Bias Detector",
-  "version": "1.0",
-  "description": "Detect and highlight potential biases in news articles",
+  "name": "Advanced Bias Detection",
+  "version": "2.0",
+  "description": "Comprehensive bias detection with NLP, sentiment analysis, and AI content detection",
   "permissions": [
     "activeTab",
     "storage",
@@ -14,7 +14,7 @@
   ],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "News Bias Detector"
+    "default_title": "Advanced Bias Detection"
   },
   "content_scripts": [
     {

@@ -1,0 +1,17 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="64" cy="64" r="60" fill="#007bff" stroke="#0056b3" stroke-width="4"/>
+  
+  <!-- Magnifying glass -->
+  <circle cx="45" cy="45" r="20" fill="none" stroke="white" stroke-width="6"/>
+  <line x1="60" y1="60" x2="80" y2="80" stroke="white" stroke-width="6" stroke-linecap="round"/>
+  
+  <!-- Warning triangle -->
+  <path d="M64 20 L80 50 L48 50 Z" fill="#ffc107" stroke="white" stroke-width="2"/>
+  <text x="64" y="45" text-anchor="middle" fill="white" font-family="Arial" font-size="16" font-weight="bold">!</text>
+  
+  <!-- Text lines with highlights -->
+  <rect x="20" y="85" width="88" height="3" fill="white" opacity="0.8"/>
+  <rect x="20" y="95" width="60" height="3" fill="#ffc107" opacity="0.8"/>
+  <rect x="20" y="105" width="70" height="3" fill="white" opacity="0.8"/>
+</svg>

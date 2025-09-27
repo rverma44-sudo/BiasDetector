@@ -1,42 +1,52 @@
-// News Bias Detector Popup Script
+// Advanced Bias Detection Popup Script
 document.addEventListener('DOMContentLoaded', function() {
-  const scoreValue = document.getElementById('scoreValue');
+  const scoreNumber = document.getElementById('scoreNumber');
+  const scoreIcon = document.getElementById('scoreIcon');
   const scoreLabel = document.getElementById('scoreLabel');
   const breakdown = document.getElementById('breakdown');
   const breakdownContent = document.getElementById('breakdownContent');
   const status = document.getElementById('status');
   const analyzeBtn = document.getElementById('analyze');
   const clearBtn = document.getElementById('clear');
-  const toggleBreakdownBtn = document.getElementById('toggleBreakdown');
+  
+  // Feature cards
+  const summaryFeature = document.getElementById('summaryFeature');
+  const biasFeature = document.getElementById('biasFeature');
+  const highlightFeature = document.getElementById('highlightFeature');
+  const scopeFeature = document.getElementById('scopeFeature');
 
   let currentAnalysis = null;
 
   // Update score display
   function updateScoreDisplay(score, breakdownData) {
-    scoreValue.textContent = score.toFixed(1);
+    scoreNumber.textContent = score.toFixed(1);
     
-    let level = 'Low';
-    let className = 'score-low';
+    let level = 'Low Risk';
+    let iconClass = 'score-low';
+    let icon = '✓';
     
-    if (score > 20) {
-      level = 'High';
-      className = 'score-high';
-    } else if (score > 10) {
-      level = 'Medium';
-      className = 'score-medium';
+    if (score > 60) {
+      level = 'High Risk';
+      iconClass = 'score-high';
+      icon = '⚠';
+    } else if (score > 30) {
+      level = 'Medium Risk';
+      iconClass = 'score-medium';
+      icon = '⚡';
     }
     
-    scoreLabel.textContent = `${level} Bias Detected`;
-    scoreValue.className = `score-value ${className}`;
+    scoreLabel.textContent = level;
+    scoreIcon.className = `score-icon ${iconClass}`;
+    scoreIcon.textContent = icon;
     
     // Update breakdown
     if (breakdownData && Object.keys(breakdownData).length > 0) {
       breakdownContent.innerHTML = Object.entries(breakdownData)
         .sort(([,a], [,b]) => b - a)
         .map(([type, value]) => `
-          <div class="bias-item">
-            <span class="bias-type">${type.charAt(0).toUpperCase() + type.slice(1)}</span>
-            <span class="bias-value">${value.toFixed(1)}</span>
+          <div class="breakdown-item">
+            <span class="breakdown-type">${type.charAt(0).toUpperCase() + type.slice(1)}</span>
+            <span class="breakdown-value">${value.toFixed(1)}</span>
           </div>
         `).join('');
     }
@@ -59,7 +69,22 @@ document.addEventListener('DOMContentLoaded', function() {
         if (response && response.success) {
           currentAnalysis = response;
           updateScoreDisplay(response.score, response.breakdown);
-          status.textContent = `Analysis complete! Found ${Object.keys(response.breakdown).length} bias types.`;
+          
+          // Show LLM analysis info if available
+          if (response.llmAnalysis && response.llmAnalysis.length > 0) {
+            status.textContent = `LLM Analysis complete! Found ${response.llmAnalysis.length} biased sections with detailed analysis.`;
+            console.log('LLM Analysis Results:', response.llmAnalysis);
+          } else {
+            status.textContent = `Analysis complete! Found ${Object.keys(response.breakdown).length} bias types.`;
+          }
+          
+          // Log summary and bias reasons
+          if (response.articleSummary) {
+            console.log('Article Summary:', response.articleSummary);
+          }
+          if (response.biasReasons && response.biasReasons.length > 0) {
+            console.log('Bias Reasons:', response.biasReasons);
+          }
           
           // Show breakdown if there's data
           if (Object.keys(response.breakdown).length > 0) {
@@ -92,14 +117,37 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Toggle breakdown visibility
-  toggleBreakdownBtn.addEventListener('click', function() {
-    if (breakdown.style.display === 'none') {
-      breakdown.style.display = 'block';
-      toggleBreakdownBtn.textContent = '📊 Hide Breakdown';
+  // Feature card event listeners
+  summaryFeature.addEventListener('click', function() {
+    if (currentAnalysis && currentAnalysis.articleSummary) {
+      alert(`Article Summary:\n\n${currentAnalysis.articleSummary}`);
     } else {
-      breakdown.style.display = 'none';
-      toggleBreakdownBtn.textContent = '📊 Show Breakdown';
+      alert('No summary available. Please analyze the page first.');
+    }
+  });
+  
+  biasFeature.addEventListener('click', function() {
+    if (currentAnalysis && currentAnalysis.biasReasons) {
+      const reasons = currentAnalysis.biasReasons.slice(0, 5).join('\n');
+      alert(`Bias Analysis:\n\n${reasons}`);
+    } else {
+      alert('No bias analysis available. Please analyze the page first.');
+    }
+  });
+  
+  highlightFeature.addEventListener('click', function() {
+    // Send message to content script to toggle highlights
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, {action: 'toggleHighlights'});
+    });
+  });
+  
+  scopeFeature.addEventListener('click', function() {
+    if (currentAnalysis) {
+      const scope = `Analysis Methods:\n• NLP + Bias Detection Models\n• Sentiment Analysis\n• Gender/Racial/Age Bias Detection\n• AI-Generated Content Detection\n\nEmotional Diet:\nPositive: ${currentAnalysis.emotionalDiet?.positive || 0}%\nNegative: ${currentAnalysis.emotionalDiet?.negative || 0}%\nNeutral: ${currentAnalysis.emotionalDiet?.neutral || 0}%`;
+      alert(scope);
+    } else {
+      alert('No analysis data available. Please analyze the page first.');
     }
   });
 
