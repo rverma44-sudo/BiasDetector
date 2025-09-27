@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      width: 350px;
+      padding: 20px;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      margin: 0;
+    }
+    
+    .container {
+      text-align: center;
+    }
+    
+    h1 {
+      font-size: 20px;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .bias-score {
+      background: rgba(255,255,255,0.15);
+      border-radius: 15px;
+      padding: 15px;
+      margin: 15px 0;
+      backdrop-filter: blur(10px);
+    }
+    
+    .score-value {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    
+    .score-label {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    
+    .score-low { color: #4caf50; }
+    .score-medium { color: #ff9800; }
+    .score-high { color: #f44336; }
+    
+    button {
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 12px 20px;
+      margin: 8px 5px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      width: 100%;
+      max-width: 280px;
+    }
+    
+    button:hover {
+      background: rgba(255,255,255,0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    .status {
+      margin-top: 15px;
+      padding: 12px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      font-size: 12px;
+      min-height: 20px;
+    }
+    
+    .bias-breakdown {
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 11px;
+      text-align: left;
+    }
+    
+    .bias-item {
+      display: flex;
+      justify-content: space-between;
+      margin: 3px 0;
+      padding: 2px 0;
+    }
+    
+    .bias-type {
+      text-transform: capitalize;
+    }
+    
+    .bias-value {
+      font-weight: bold;
+    }
+    
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .info {
+      font-size: 11px;
+      opacity: 0.8;
+      margin-top: 10px;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>
+      <span>🔍</span>
+      News Bias Detector
+    </h1>
+    
+    <div class="bias-score">
+      <div class="score-value" id="scoreValue">--</div>
+      <div class="score-label" id="scoreLabel">Analyzing...</div>
+    </div>
+    
+    <div class="bias-breakdown" id="breakdown" style="display: none;">
+      <div style="font-weight: bold; margin-bottom: 8px; text-align: center;">Bias Breakdown</div>
+      <div id="breakdownContent"></div>
+    </div>
+    
+    <div class="controls">
+      <button id="analyze">🔍 Analyze Page</button>
+      <button id="clear">🗑️ Clear Analysis</button>
+      <button id="toggleBreakdown">📊 Toggle Breakdown</button>
+    </div>
+    
+    <div class="status" id="status">
+      Click "Analyze Page" to detect biases
+    </div>
+    
+    <div class="info">
+      This extension analyzes news articles for emotional, sensational, political, subjective, and exaggerated language patterns.
+    </div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

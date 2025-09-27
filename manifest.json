@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "News Bias Detector",
+  "version": "1.0",
+  "description": "Detect and highlight potential biases in news articles",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "News Bias Detector"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["bias-styles.css"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["bias-styles.css"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
